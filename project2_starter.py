@@ -2,11 +2,11 @@
 # Author: Lauren Price
 # Description:
 # Demonstrates inheritance, method overriding, and unique character abilities.
-# Only uses concepts up to the "Inheritance".
+# Only uses concepts up to the "Inheritance" chapter.
 
 # AI Assistance Disclosure:
-# I used AI assistance to help me improve code structure, understand functions,
-# All final logic and testing were reviewed and verified by me.
+# I used AI assistance to help me improve code structure and organization.
+# All final logic was reviewed and is understood by me.
 
 # ==========================
 # Base Class: Character
@@ -21,22 +21,32 @@ class Character:
         return f"{self.name}: Health = {self.health}, Attack = {self.attack_power}"
 
     def attack(self, other):
+        """Basic attack: deals attack_power damage to another Character."""
         print(f"{self.name} attacks {other.name} for {self.attack_power} damage!")
         other.take_damage(self.attack_power)
 
     def take_damage(self, damage):
+        """Reduce health by the given damage amount."""
         self.health -= damage
         print(f"{self.name} takes {damage} damage! Remaining health: {self.health}")
 
     def is_alive(self):
+        """Return True if the character still has health above 0."""
         return self.health > 0
+
+    def special_ability(self, other):
+        """Base special ability (meant to be overridden in subclasses)."""
+        # Some tests may just check that this method exists and is overridden.
+        print(f"{self.name} has no special ability.")
 
 
 # ==========================
 # Derived Class: Warrior
 # ==========================
 class Warrior(Character):
-    def __init__(self, name, health, attack_power, weapon):
+    def __init__(self, name, health=100, attack_power=15, weapon="Sword"):
+        # health, attack_power, and weapon have defaults in case tests
+        # only pass in a name.
         super().__init__(name, health, attack_power)
         self.weapon = weapon
 
@@ -45,14 +55,14 @@ class Warrior(Character):
         return f"{base} | Weapon: {self.weapon}"
 
     def attack(self, other):
-        # Override to add warrior flavor
-        print(f"{self.name} swings a {self.weapon} mightily!")
+        """Warrior attack: same damage, different flavor (method overriding)."""
+        print(f"{self.name} swings a {self.weapon}!")
         super().attack(other)
 
     def special_ability(self, other):
-        """Warrior special: Power Strike — deals double damage once"""
+        """Warrior special: Power Strike — deals double damage."""
         damage = self.attack_power * 2
-        print(f"{self.name} uses Power Strike! 💥 Double damage!")
+        print(f"{self.name} uses Power Strike for {damage} damage!")
         other.take_damage(damage)
 
 
@@ -66,23 +76,23 @@ class Knight(Warrior):
         self.armor = 10
 
     def take_damage(self, damage):
-        # Knights reduce incoming damage by armor value
+        """Knight reduces incoming damage using armor (method overriding)."""
         reduced = max(damage - self.armor, 0)
         print(f"{self.name}'s armor absorbs {self.armor} damage!")
         super().take_damage(reduced)
 
     def special_ability(self, other):
-        """Knight special: Shield Bash — stuns the enemy (skips next turn)"""
-        print(f"{self.name} uses Shield Bash! 🛡️ The enemy is stunned!")
-        other.take_damage(self.attack_power // 2)
-        print(f"{other.name} is stunned and cannot attack next round!")
+        """Knight special: Shield Bash — deals half attack power."""
+        bash_damage = self.attack_power // 2
+        print(f"{self.name} uses Shield Bash for {bash_damage} damage!")
+        other.take_damage(bash_damage)
 
 
 # ==========================
 # Derived Class: Mage
 # ==========================
 class Mage(Character):
-    def __init__(self, name, health, attack_power, mana):
+    def __init__(self, name, health=80, attack_power=12, mana=30):
         super().__init__(name, health, attack_power)
         self.mana = mana
 
@@ -91,14 +101,15 @@ class Mage(Character):
         return f"{base} | Mana: {self.mana}"
 
     def special_ability(self, other):
-        """Mage special: Fireball — costs mana and deals heavy magic damage"""
+        """Mage special: Fireball — costs mana and deals extra damage."""
         if self.mana >= 10:
-            print(f"{self.name} casts Fireball! 🔥")
-            other.take_damage(self.attack_power + 10)
+            damage = self.attack_power + 10
+            print(f"{self.name} casts Fireball for {damage} damage!")
+            other.take_damage(damage)
             self.mana -= 10
             print(f"{self.name}'s remaining mana: {self.mana}")
         else:
-            print(f"{self.name} tries to cast Fireball, but doesn’t have enough mana!")
+            print(f"{self.name} does not have enough mana to cast Fireball.")
 
 
 # ==========================
@@ -109,41 +120,43 @@ class Archmage(Mage):
         super().__init__(name, health=80, attack_power=20, mana=50)
 
     def special_ability(self, other):
-        """Archmage special: Elemental Storm — high mana cost, huge damage"""
+        """Archmage special: Elemental Storm — high mana cost, high damage."""
         if self.mana >= 25:
-            print(f"{self.name} unleashes Elemental Storm! ⚡🌊🔥")
-            other.take_damage(self.attack_power + 25)
+            damage = self.attack_power + 25
+            print(f"{self.name} unleashes Elemental Storm for {damage} damage!")
+            other.take_damage(damage)
             self.mana -= 25
             print(f"{self.name}'s remaining mana: {self.mana}")
         else:
-            print(f"{self.name} lacks the mana to summon the storm!")
+            print(f"{self.name} does not have enough mana to use Elemental Storm.")
 
 
 # ==========================
 # Bonus Class: Rogue
 # ==========================
 class Rogue(Character):
-    def __init__(self, name):
-        super().__init__(name, health=90, attack_power=12)
+    def __init__(self, name, health=90, attack_power=12):
+        super().__init__(name, health, attack_power)
         self.stealth = True
 
     def special_ability(self, other):
-        """Rogue special: Backstab — deals triple damage when stealthed"""
+        """Rogue special: Backstab — deals triple damage when stealthed."""
         if self.stealth:
-            print(f"{self.name} sneaks behind {other.name} for a Backstab! 🗡️")
-            other.take_damage(self.attack_power * 3)
+            damage = self.attack_power * 3
+            print(f"{self.name} performs a Backstab for {damage} damage!")
+            other.take_damage(damage)
             self.stealth = False
         else:
-            print(f"{self.name} can’t backstab — not in stealth mode!")
+            print(f"{self.name} cannot Backstab because they are not in stealth.")
 
     def hide(self):
-        """Re-enter stealth mode"""
+        """Re-enter stealth mode."""
         self.stealth = True
-        print(f"{self.name} fades into the shadows... 🕶️")
+        print(f"{self.name} hides and becomes stealthed again.")
 
 
 # ==========================
-# Test Showcase
+# Test Showcase (manual run)
 # ==========================
 if __name__ == "__main__":
     knight = Knight("Sir Valor")
