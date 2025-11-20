@@ -56,9 +56,8 @@ Final health outcome
 To run all automated tests:
 python3 -m unittest
 Make sure not to modify the test files provided.
- AI Assistance
+## AI Assistance
 AI assistance was used for:
-Formatting
 Organization
 Documentation style
 All logic and final testing were reviewed and fully understood by me.
