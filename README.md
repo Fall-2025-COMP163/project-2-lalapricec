@@ -1,7 +1,7 @@
 <div align="center">
 
-# ⚔️ Character Abilities Showcase  
-### *COMP 163 — Project 2*  
+# ⚔️ Character Abilities Showcase
+### *COMP 163 — Project 2*
 **Author: Lauren Price**
 
 A polished, object-oriented fantasy battle simulation demonstrating  
